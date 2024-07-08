@@ -29,7 +29,7 @@ const registerSuccesfullTransaction = async (req: Request, res: Response,) => {
 
 const getUserPaymentHistory = async (req: Request, res: Response) => {
     try{
-        const walletAddress: string = req.body.walletAddress;
+        const walletAddress: string = req.query.walletAddress as string;
         console.log(walletAddress);
         const history = await service.getUserHistory(walletAddress);
         console.log(history);

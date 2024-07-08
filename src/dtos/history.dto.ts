@@ -1,5 +1,5 @@
 export interface  historyDto {
-    item_name: string;
+    name: string;
     price: number;
     oneShotUrl? : string;
     walletAddress: string;

@@ -12,7 +12,7 @@ export class HistoryRepository {
             const history = await prisma.userHistory.create({
                 data:{
                     walletAddress: historyDto.walletAddress,
-                    name: historyDto.item_name,
+                    name: historyDto.name,
                     price: +historyDto.price,
                     oneShotUrl: historyDto.oneShotUrl
                 }
