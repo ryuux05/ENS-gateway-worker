@@ -14,7 +14,8 @@ export class HistoryRepository {
                     walletAddress: historyDto.walletAddress,
                     name: historyDto.name,
                     price: +historyDto.price,
-                    oneShotUrl: historyDto.oneShotUrl
+                    oneShotUrl: historyDto.oneShotUrl,
+                    project: historyDto.anken,
                 }
             })   
         } catch(error) {
@@ -22,18 +23,19 @@ export class HistoryRepository {
             throw error;
         }
     }
-    async getUserHistory(walletAddress: string): Promise<userHistory[]> {
+    async getUserHistory(walletAddress: string, anken: string): Promise<userHistory[]> {
         try {
-
             const history = await prisma.userHistory.findMany({
                 where:{
-                    walletAddress: walletAddress
+                    walletAddress: walletAddress,
+                    project: anken
                 },
                 select:{
                     name: true,
                     price: true,
                     oneShotUrl: true,
-                    created_at: true
+                    created_at: true,
+                    project: true,
                 }
             });
             console.log(history);

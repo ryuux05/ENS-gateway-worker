@@ -20,4 +20,5 @@ model userHistory {
   price         Int
   created_at    DateTime @default(dbgenerated("now() at time zone 'utc' + interval '9 hours'"))
   oneShotUrl    String
+  project       String @default("TokyuNFTGauge")
 }

@@ -30,8 +30,13 @@ const registerSuccesfullTransaction = async (req: Request, res: Response,) => {
 const getUserPaymentHistory = async (req: Request, res: Response) => {
     try{
         const walletAddress: string = req.query.walletAddress as string;
+        const anken: string = req.query.anken as string;
         console.log(walletAddress);
-        const history = await service.getUserHistory(walletAddress);
+        if (!walletAddress || !anken) {
+            return res.status(404).send("No history found")
+        }
+
+        const history = await service.getUserHistory(walletAddress, anken);
         console.log(history);
         return res.status(201).send(history);
     } catch(error) {

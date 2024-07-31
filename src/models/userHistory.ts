@@ -3,7 +3,7 @@ export class userHistory {
     name: string;
     price: number;
     oneShotUrl: string;
-
+    project: string;
     constructor(props: userHistory) {
         Object.assign(this, props);
     }

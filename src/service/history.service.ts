@@ -9,8 +9,8 @@ export class HistoryService {
         this.historyRepository = new HistoryRepository()
     }
    
-    async getUserHistory(walletAddress: string): Promise<userHistory[]> {
-        return await this.historyRepository.getUserHistory(walletAddress);
+    async getUserHistory(walletAddress: string, anken: string): Promise<userHistory[]> {
+        return await this.historyRepository.getUserHistory(walletAddress, anken);
 
         
     }

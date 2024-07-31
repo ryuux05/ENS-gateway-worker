@@ -3,4 +3,5 @@ export interface  historyDto {
     price: number;
     oneShotUrl? : string;
     walletAddress: string;
+    anken: string;
 }
