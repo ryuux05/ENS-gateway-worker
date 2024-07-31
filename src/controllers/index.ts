@@ -32,9 +32,9 @@ const getUserPaymentHistory = async (req: Request, res: Response) => {
         const walletAddress: string = req.query.walletAddress as string;
         const anken: string = req.query.anken as string;
         console.log(walletAddress);
-        if (!walletAddress || !anken) {
-            return res.status(404).send("No history found")
-        }
+        // if (!walletAddress || !anken) {
+        //     return res.status(404).send("No history found")
+        // }
 
         const history = await service.getUserHistory(walletAddress, anken);
         console.log(history);
