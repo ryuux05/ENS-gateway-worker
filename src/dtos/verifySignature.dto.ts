@@ -1,5 +1,5 @@
 export interface verifySignatureDto {
-    walletAddress: string;
-    digest: string;
-    signature: string;
+  walletAddress: string;
+  digest: string;
+  signature: string;
 }

@@ -1,4 +1,4 @@
 export interface walletSignature {
-    publicKey: string
-    signature: string
-}   
+  publicKey: string;
+  signature: string;
+}
