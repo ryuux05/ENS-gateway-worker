@@ -1,9 +1,10 @@
-import ethers from "ethers";
+import { ethers } from 'ethers';
 import { verifySignatureDto } from "../dtos/verifySignature.dto";
 
 export const verifySignature = async (
   dto: verifySignatureDto
 ): Promise<boolean> => {
+  console.log(dto);
   const contract = new ethers.Contract(
     dto.walletAddress,
     [
@@ -32,7 +33,7 @@ export const verifySignature = async (
         type: "function",
       },
     ],
-    new ethers.JsonRpcProvider("https://www.notion.so/NFT-fe6067482855441db6c973237012c384?pvs=4")
+    new ethers.JsonRpcProvider("https://polygon-mainnet.infura.io/v3/4d20e55995f54fabb320dec99707071b")
   );
 
   try {
