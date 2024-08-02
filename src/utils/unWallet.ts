@@ -32,7 +32,7 @@ export const verifySignature = async (
         type: "function",
       },
     ],
-    new ethers.JsonRpcProvider("url")
+    new ethers.JsonRpcProvider("https://www.notion.so/NFT-fe6067482855441db6c973237012c384?pvs=4")
   );
 
   try {
