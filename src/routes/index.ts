@@ -1,8 +1,99 @@
-import express from "express";
-import controller from "../controllers/index";
+import express, { Request, Response } from 'express';
+import { Redis } from '@upstash/redis/cloudflare';
+import dotenv from 'dotenv';
+import logging from "../config/logging";
+
+dotenv.config(); // Load environment variables
 
 const router = express.Router();
 
-router.get("/check", controller.serverHealthCheck);
+interface Message {
+    sender: string;
+    amount: number;
+    expired: Date;
+    nonce: number;
+}
+
+interface DataValue {
+    signature: string;
+    message: Message;
+}
+
+
+// Initialize Upstash Redis client
+const redis = new Redis({
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
+});
+
+router.post("/register", async(req: Request, res: Response) => {
+    try {
+        const { key, value } = await req.body;
+
+        // Validate key and value
+        if (!key || !value) {
+            return res.status(400).json({
+            success: false,
+            error: 'Key and value are required',
+            });
+        }
+    
+         // Ensure that value has the correct structure
+        const dataValue: DataValue = value;
+
+        if (!dataValue.signature || !dataValue.message) {
+        return res.status(400).json({
+            success: false,
+            error: 'Value must contain signature and message',
+        });
+        }
+
+        // Save the value in Redis
+        await redis.set(encodeURI(key), JSON.stringify(dataValue));
+
+    
+        res.json({
+            success: true,
+            key,
+            value: dataValue,
+          });
+    } catch (error) {
+          res.status(500).json({
+            success: false,
+            error: String(error),
+          });    
+    }
+})
+
+// Get route
+router.get('/get/:key', async (req: Request, res: Response) => {
+    try {
+      const key = req.params.key;
+
+      const value = await redis.get<string>(encodeURI(key));
+
+      console.log(value);
+  
+      if (value) {
+        // Parse the value back to the DataValue type
+        console.log(value);
+        res.json({
+          success: true,
+          key,
+          value: value,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          error: 'Key not found',
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: String(error),
+      });
+    }
+  });
 
 export = router;
