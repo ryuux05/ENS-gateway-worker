@@ -3,6 +3,7 @@ import { Redis } from '@upstash/redis/cloudflare';
 import dotenv from 'dotenv';
 import logging from "../config/logging";
 import { decodeDnsName } from '../utils';
+import { ethers } from 'ethers';
 
 dotenv.config(); // Load environment variables
 
@@ -97,7 +98,7 @@ router.get('/get/:key', async (req: Request, res: Response) => {
     }
   });
 
-  router.get('gateway/:sender/:data', async (req: Request, res: Response) => {
+  router.get('/gateway/:sender/:data', async (req: Request, res: Response) => {
     try {
       const sender = req.params.sender;
       const data = req.params.data;
@@ -105,9 +106,9 @@ router.get('/get/:key', async (req: Request, res: Response) => {
       console.log("Sender: ", sender);
       console.log("Data: ", data);
 
-      const name = decodeDnsName(Buffer.from(sender.slice(2), 'hex'));
+      const name = decodeDnsName(Buffer.from(data.slice(2), 'hex'));
 
-      console.log(name);
+      console.log("name: ",name);
 
     } catch (error) {
       res.status(500).json({
@@ -116,5 +117,41 @@ router.get('/get/:key', async (req: Request, res: Response) => {
       });
     }
   });
+  router.post('/gateway', async (req, res) => {
+    try {
+      const { sender, data, to } = req.body;
+  
+      // Validate input
+      if (!sender || !data || !to) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+      }
+  
+      // Decode the callData to extract the name
+      // Use ethers.js Interface to decode the data
+      const resolverInterface = new ethers.utils.Interface([
+        'function resolve(bytes calldata name, bytes calldata data) external view returns (bytes memory)',
+      ]);
+  
+      const decodedData = resolverInterface.decodeFunctionData('resolve', data);
+  
+      const name = ethers.utils.toUtf8String(decodedData.name);
+  
+      // Lookup the data in the data store
+      const record = dataStore[name];
+      if (!record) {
+        return res.status(404).json({ error: 'Record not found' });
+      }
+  
+      // Return the stored signature and message
+      res.json({
+        signature: record.signature,
+        message: record.message,
+      });
+    } catch (error) {
+      console.error('Error handling resolve request:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  })
+  
 
 export = router;
