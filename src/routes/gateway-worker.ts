@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { Redis } from '@upstash/redis/cloudflare';
 import dotenv from 'dotenv';
 import logging from "../config/logging";
+import { decodeDnsName } from '../utils';
 
 dotenv.config(); // Load environment variables
 
@@ -88,6 +89,26 @@ router.get('/get/:key', async (req: Request, res: Response) => {
           error: 'Key not found',
         });
       }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: String(error),
+      });
+    }
+  });
+
+  router.get('gateway/:sender/:data', async (req: Request, res: Response) => {
+    try {
+      const sender = req.params.sender;
+      const data = req.params.data;
+
+      console.log("Sender: ", sender);
+      console.log("Data: ", data);
+
+      const name = decodeDnsName(Buffer.from(sender.slice(2), 'hex'));
+
+      console.log(name);
+
     } catch (error) {
       res.status(500).json({
         success: false,

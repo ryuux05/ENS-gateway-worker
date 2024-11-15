@@ -4,7 +4,7 @@ import cors from "cors";
 import http from "http";
 import logging from "./config/logging";
 import config from "./config/config";
-import routes from "./routes";
+import routes from "./routes/gateway-worker";
 
 const NAMESPACE = "Server";
 
