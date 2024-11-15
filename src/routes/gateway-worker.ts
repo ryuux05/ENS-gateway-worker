@@ -118,7 +118,7 @@ router.get('/get/:key', async (req: Request, res: Response) => {
       });
     }
   });
-  router.post('/gateway', async (req, res) => {
+  router.post('/gateway/:sender', async (req, res) => {
     try {
       const { sender, data, to } = req.body;
   
