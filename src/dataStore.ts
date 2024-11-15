@@ -1,4 +1,4 @@
-const dataStore = {
+export const dataStore = {
     // Key: ENS name or identifier
     'sub1.alice.eth': {
       signature: '0xSignatureForSub1Alice', // Pre-generated signature

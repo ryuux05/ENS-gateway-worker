@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import logging from "../config/logging";
 import { decodeDnsName } from '../utils';
 import { ethers } from 'ethers';
+import {dataStore} from "../dataStore"
 
 dotenv.config(); // Load environment variables
 
