@@ -99,7 +99,7 @@ router.get('/get/:key', async (req: Request, res: Response) => {
     }
   });
 
-  router.get('/gateway/:sender/:data', async (req: Request, res: Response) => {
+  router.get('/gateway/:sender/:data.json', async (req: Request, res: Response) => {
     try {
       const sender = req.params.sender;
       const data = req.params.data;
