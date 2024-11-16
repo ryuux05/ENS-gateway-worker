@@ -107,9 +107,8 @@ router.get('/get/:key', async (req: Request, res: Response) => {
       console.log("Sender: ", sender);
       console.log("Data: ", data);
 
-      const name = decodeDnsName(Buffer.from(data.slice(2), 'hex'));
-
-      console.log("name: ",name);
+      const decodedName = ethers.utils.toUtf8String(data);
+      console.log("name: ",decodedName);
 
     } catch (error) {
       res.status(500).json({
